@@ -1,0 +1,37 @@
+# k8s-edge-scheduler : custom kubernetes scheduler for placing pods based on location data
+# Copyright (c) 2019, Lukas Steiner, Deutsche Telekom AG
+# contact: opensource@telekom.de
+
+# This file is licensed under the terms of the 3-Clause BSD License  [SPDX: BSD3-Clause]. 
+# For Details see the file LICENSE on the top level of the project repository.
+
+kind: Pod
+apiVersion: v1
+metadata:
+  name: edge-scheduler
+  labels:
+    app: edge-scheduler
+spec:
+  serviceAccount: kube-scheduler
+  containers:
+  - name: edge-scheduler
+    image: k8s-edge-scheduler
+    env:
+      - name: NAME
+        value: edge-scheduler
+      - name: NAMESPACE
+        value: default
+      - name: INFLUXADDR
+        value: "http://influxdb.open-edge-cloud:8086"
+      - name: INFLUXUSER
+        value: influx
+      - name: INFLUXPASSWORD
+        value: influx
+      - name: INFLUXDB
+        value: edge-db
+      - name: DEFAULTLOCATION
+        value: frankfurt
+      - name: DEBUG
+        value: "false"
+      - name: DESCHEDULEINTERVAL
+        value: "15s"
